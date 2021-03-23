@@ -20,8 +20,7 @@ struct MeetingView: View {
                 MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed,
                                   secondsRemaining: scrumTimer.secondsRemaining,
                                   scrumColor: scrum.color)
-                Circle()
-                    .strokeBorder(lineWidth: 24, antialiased: true)
+                MeetingTimerView(speakers: scrumTimer.speakers, scrumColor: scrum.color)
                 MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
             }
         }
@@ -37,6 +36,8 @@ struct MeetingView: View {
         }
         .onDisappear {
             scrumTimer.stopScrum()
+            let newHistory = History(attendees: scrum.attendees, lengthInMinutes: scrumTimer.secondsElapsed / 60)
+            scrum.history.insert(newHistory, at: 0)
         }
     }
 }
